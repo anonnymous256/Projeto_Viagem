@@ -25,7 +25,6 @@ class _AberturaState extends State<Abertura> {
     'lib/assets/image/paisagem.jpeg',
     'lib/assets/image/parque.jpg',
     'lib/assets/image/praia.jpeg',
-    'lib/assets/image/inicial.png',
   ];
 
   String selectedImage = '';
