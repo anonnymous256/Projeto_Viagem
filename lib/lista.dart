@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'tarefa.dart';
-//import 'abertura.dart';
+import 'abertura.dart';
 
 class TodoListApp extends StatelessWidget {
   @override
@@ -67,12 +67,13 @@ class ListaScreenState extends State<ListaScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Lista de Tarefas"),
-          leading: IconButton(
-      icon: Icon(Icons.arrow_back),
-      onPressed: () {
-        Navigator.pop(context); // Retorna para a tela anterior
-      },
-    ),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            //Navigator.pop(context);
+           Navigator.push(context, MaterialPageRoute(builder:   (context)=> Abertura()));
+          },
+        ),
       ),
       body: Column(
         mainAxisSize: MainAxisSize.max,
@@ -84,21 +85,22 @@ class ListaScreenState extends State<ListaScreen> {
               onSubmitted: adicionaTarefa,
             ),
           ),
+          ElevatedButton(
+            onPressed: () {
+              if (controller.text == '') {
+                return;
+              }else{
+              adicionaTarefa(controller.text);
+              }
+            },
+            child: Text('Adicionar Tarefa'),
+          ),
           Expanded(
             child: ListView.builder(
               itemCount: tarefas.length,
               itemBuilder: (_, indice) {
                 return getItem(tarefas[indice]);
               },
-            ),
-          ),
-          Container(
-            padding: EdgeInsets.all(8.0),
-            child: ElevatedButton(
-              onPressed: () {
-                Navigator.pop(context); // Retorna para a tela anterior
-              },
-              child: Text('Voltar'),
             ),
           ),
         ],

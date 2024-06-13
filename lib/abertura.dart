@@ -1,3 +1,5 @@
+//import 'dart:js_interop_unsafe';
+
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -155,25 +157,34 @@ class _AberturaState extends State<Abertura> {
             ],
           ),
           actions: [
-TextButton(
-  child: Text('Tarefas'),
+  Tooltip(
+    message: 'lista',          
+    child: IconButton(
+  icon: Icon(Icons.list),
   onPressed: () {
+    
     Navigator.of(context).push(MaterialPageRoute(builder: (context) => TodoListApp()));
-  },
-),
-            TextButton(
-              child: Text('Cancelar'),
+   },
+  ),
+ ),
+Tooltip(
+  message: 'cancelar',
+            child:IconButton(
+              icon: Icon(Icons.cancel),
               onPressed: () {
                 Navigator.of(context).pop();
-              },
-            ),
-            ElevatedButton(
-              child: Text('Adicionar'),
+     },
+   ),
+),
+Tooltip(
+  message: 'salvar',
+            child: IconButton(
+              icon: Icon(Icons.save),
               onPressed: () {
                 if (selectedImage == '' || titleController.text == '') {
                   showAlertDialog(context, 'Escolha uma capa e um titulo!');
                   return;
-                }
+                }else{
                 _adicionarViagem(
                   titleController.text,
                   descriptionController.text,
@@ -181,8 +192,10 @@ TextButton(
                   selectedImage,
                 );
                 Navigator.of(context).pop();
+                }
               },
             ),
+),
           ],
         );
       },
