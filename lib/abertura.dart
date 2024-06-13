@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'Login.dart';
+import 'lista.dart';
 
 class Abertura extends StatefulWidget {
   @override
@@ -154,6 +155,12 @@ class _AberturaState extends State<Abertura> {
             ],
           ),
           actions: [
+TextButton(
+  child: Text('Tarefas'),
+  onPressed: () {
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => TodoListApp()));
+  },
+),
             TextButton(
               child: Text('Cancelar'),
               onPressed: () {
