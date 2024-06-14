@@ -47,11 +47,11 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_launcher_icons: ^0.12.0
+  flutter_launcher_icons: ^0.13.1
 
 flutter_launcher_icons:
   android: "launcher_icon"
-  image_path: "assets/image/logo.png"
+  image_path: "lib/assets/image/logo.png"
   min_sdk_android: 21 # android min sdk min:16
 
   # The "flutter_lints" package below contains a set of recommended lints to
@@ -86,4 +86,5 @@ flutter:
     - lib/assets/image/parque.jpg
     - lib/assets/image/praia.jpeg
     - lib/assets/image/inicial.png
+    - lib/assets/image/logo.png
     

@@ -16,7 +16,7 @@ class _LoginPageState extends State<LoginPage> {
     final email = _emailController.text;
     final password = _passwordController.text;
 
-    AutenticacaoServico _autenticacaoServico = AutenticacaoServico();
+    AutenticacaoServico _autenticacaoServico = AutenticacaoServico.instance;
 
     try {
       bool isAuthenticated =

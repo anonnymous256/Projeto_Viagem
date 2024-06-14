@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'autenticacao_servico.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -19,7 +18,7 @@ class _RegisterPageState extends State<RegisterPage> {
     final password = _passwordController.text;
     final confirmPassword = _confirmPasswordController.text;
 
-    AutenticacaoServico _autenticacaoServico = AutenticacaoServico();
+    AutenticacaoServico _autenticacaoServico = AutenticacaoServico.instance;
 
     if (password != confirmPassword) {
       ScaffoldMessenger.of(context).showSnackBar(

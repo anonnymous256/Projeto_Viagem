@@ -38,6 +38,7 @@ class _AberturaState extends State<Abertura> {
     _checkAuthState();
   }
 
+//Função para verificar o estado de autenticação
   void _checkAuthState() {
     User? user = _auth.currentUser;
     if (user != null) {
@@ -47,7 +48,7 @@ class _AberturaState extends State<Abertura> {
       _fetchViagens();
     }
   }
-
+//Função para buscar viagens
   void _fetchViagens() {
     _firestore
         .collection('viagens')
@@ -70,7 +71,7 @@ class _AberturaState extends State<Abertura> {
       print('Erro ao buscar viagens: $error');
     });
   }
-
+//Função para mostrar alerta
   void showAlertDialog(BuildContext context, String message) {
     showDialog(
       context: context,
@@ -90,7 +91,7 @@ class _AberturaState extends State<Abertura> {
       },
     );
   }
-
+//Função para mostrar excluir
   void showexcluirtDialog(BuildContext context, String message, int index) {
     showDialog(
       context: context,
@@ -116,7 +117,7 @@ class _AberturaState extends State<Abertura> {
       },
     );
   }
-
+//Função para mostrar adicionar viagem
   void _showAddSquareDialog() {
     final TextEditingController titleController = TextEditingController();
     final TextEditingController descriptionController = TextEditingController();
@@ -157,51 +158,37 @@ class _AberturaState extends State<Abertura> {
             ],
           ),
           actions: [
-  Tooltip(
-    message: 'lista',          
-    child: IconButton(
-  icon: Icon(Icons.list),
-  onPressed: () {
-    
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => TodoListApp()));
-   },
-  ),
- ),
-Tooltip(
-  message: 'cancelar',
-            child:IconButton(
-              icon: Icon(Icons.cancel),
-              onPressed: () {
-                Navigator.of(context).pop();
-     },
-   ),
-),
-Tooltip(
-  message: 'salvar',
-            child: IconButton(
-              icon: Icon(Icons.save),
-              onPressed: () {
-                if (selectedImage == '' || titleController.text == '') {
-                  showAlertDialog(context, 'Escolha uma capa e um titulo!');
-                  return;
-                }else{
-                _adicionarViagem(
-                  titleController.text,
-                  descriptionController.text,
-                  budgetController.text,
-                  selectedImage,
-                );
-                Navigator.of(context).pop();
-                }
-              },
+            TextButton(
+              child:Text('Cancelar'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
             ),
-),
+            TextButton(
+              child:Text('Salvar'),
+                onPressed: () {
+                  if (selectedImage == '' || titleController.text == '') {
+                    showAlertDialog(context, 'Escolha uma capa e um titulo!');
+                    return;
+                  } else {
+                    _adicionarViagem(
+                      titleController.text,
+                      descriptionController.text,
+                      budgetController.text,
+                      selectedImage,
+                    );
+                    _showaddListcriar(squares.length - 1);
+                    
+                  }
+                },
+              
+            ),
           ],
         );
       },
     );
   }
-
+//Função para mostrar escolher capa
   void _showChooseCoverDialog() {
     showDialog(
       context: context,
@@ -243,7 +230,7 @@ Tooltip(
       },
     );
   }
-
+//Função para adicionar viagem
   void _adicionarViagem(
     String title,
     String description,
@@ -263,7 +250,7 @@ Tooltip(
       print('Erro ao adicionar viagem: $error');
     });
   }
-
+//Função para mostrar editar viagem
   void _showEditSquareDialog(int index) {
     final TextEditingController titleController = TextEditingController();
     final TextEditingController descriptionController = TextEditingController();
@@ -291,216 +278,262 @@ Tooltip(
               TextField(
                 controller: descriptionController,
                 decoration: InputDecoration(
-                  labelText: 'O que você pretende fazerna viagem?',
-),
-),
-TextField(
-controller: budgetController,
-decoration: InputDecoration(
-labelText: 'Quanto você pretende gastar na viagem?',
-),
-keyboardType: TextInputType.number,
-),
-SizedBox(height: 20),
-ElevatedButton(
-onPressed: _showChooseCoverDialog,
-child: Text('Alterar capa'),
-),
-],
-),
-actions: [
-TextButton(
-child: Text('Cancelar'),
-onPressed: () {
-Navigator.of(context).pop();
-},
-),
-ElevatedButton(
-child: Text('Salvar'),
-onPressed: () {
-_editarViagem(
-squares[index]['id'],
-titleController.text,
-descriptionController.text,
-budgetController.text,
-selectedImage,
-);
-Navigator.of(context).pop();
-},
-),
-],
-);
-},
-);
-}
+                  labelText: 'O que você pretende fazer na viagem?',
+                ),
+              ),
+              TextField(
+                controller: budgetController,
+                decoration: InputDecoration(
+                  labelText: 'Quanto você pretende gastar na viagem?',
+                ),
+                keyboardType: TextInputType.number,
+              ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: _showChooseCoverDialog,
+                child: Text('Alterar capa'),
+                
+              ),
+            ],
+          ),
+          actions: [
+             TextButton(
+              child: Text('Cancelar'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('Salvar'),
+              onPressed: () {
+                _editarViagem(
+                  squares[index]['id'],
+                  titleController.text,
+                  descriptionController.text,
+                  budgetController.text,
+                  selectedImage,
+                );
+                Navigator.of(context).pop();
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+//Função para mostrar a lista
+  void _navigateToTodoListScreen(String viagemId) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => TodoListApp(viagemId: viagemId),
+      ),
+    );
+  }
+//Função para mostrar adicionar lista
+  void _showaddListcriar(int index) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Tudo certo!'),
+          content: Text('Você quer adicionar uma lista de tarefas agora?'),
+          actions: [
+            TextButton(
+              child: Text('Não'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('Sim'),
+              onPressed: () {
+                _navigateToTodoListScreen(squares[index]['id']);
+                
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+//Função para editar viagem
+  void _editarViagem(
+    String id,
+    String title,
+    String description,
+    String budget,
+    String image,
+  ) {
+    _firestore.collection('viagens').doc(id).update({
+      'title': title,
+      'description': description,
+      'budget': budget,
+      'image': image,
+    }).then((value) {
+      print('Viagem editada com sucesso!');
+      _fetchViagens();
+    }).catchError((error) {
+      print('Erro ao editar viagem: $error');
+    });
+  }
+//Função para remover viagem
+  void _removerViagem(int index) {
+    String id = squares[index]['id'];
+    _firestore.collection('viagens').doc(id).delete().then((value) {
+      setState(() {
+        squares.removeAt(index);
+      });
+      print('Viagem removida com sucesso!');
+    }).catchError((error) {
+      print('Erro ao remover viagem: $error');
+    });
+  }
+//Função para sair
+  void _logout() async {
+    Navigator.of(context).pushReplacement(MaterialPageRoute(
+      builder: (context) => LoginPage(),
+    ));
+  }
 
-void _editarViagem(
-String id,
-String title,
-String description,
-String budget,
-String image,
-) {
-_firestore.collection('viagens').doc(id).update({
-'title': title,
-'description': description,
-'budget': budget,
-'image': image,
-}).then((value) {
-print('Viagem editada com sucesso!');
-_fetchViagens();
-}).catchError((error) {
-print('Erro ao editar viagem: $error');
-});
-}
-
-void _removerViagem(int index) {
-String id = squares[index]['id'];
-_firestore.collection('viagens').doc(id).delete().then((value) {
-setState(() {
-squares.removeAt(index);
-});
-print('Viagem removida com sucesso!');
-}).catchError((error) {
-print('Erro ao remover viagem: $error');
-});
-}
-
-void _logout() async {
-  Navigator.of(context).pushReplacement(MaterialPageRoute(
-    builder: (context) => LoginPage(),
-  ));
-}
-@override
-Widget build(BuildContext context) {
-return MaterialApp(
-debugShowCheckedModeBanner: false,
-home: Scaffold(
-appBar: AppBar(
-backgroundColor: Color.fromARGB(207, 1, 167, 179),
-title: Text('Viagens'),
-actions: [
-IconButton(
-onPressed: () => _logout(),
-icon: Icon(Icons.exit_to_app),
-),
-],
-),
-body: Stack(
-children: [
-Center(
-child: Container(
-width: double.infinity,
-height: double.infinity,
-decoration: BoxDecoration(
-image: DecorationImage(
-image: AssetImage('lib/assets/image/inicial.png'),
-fit: BoxFit.cover,
-),
-),
-),
-),
-Column(
-children: [
-Spacer(flex: 1),
-Expanded(
-flex: 1,
-child: Column(
-children: [
-Expanded(
-child: GridView.builder(
-gridDelegate:
-SliverGridDelegateWithFixedCrossAxisCount(
-crossAxisCount: 3,
-childAspectRatio: 1,
-),
-itemCount: squares.length,
-itemBuilder: (context, index) {
-final square = squares[index];
-return GestureDetector(
-onTap: () {
-showDialog(
-context: context,
-builder: (BuildContext context) {
-return AlertDialog(
-title: Text(square['title'] ?? ''),
-content: Column(
-mainAxisSize: MainAxisSize.min,
-children: [
-Text(
-"Descrição: ${square['description'] ?? ''}"),
-Text(
-"Orçamento: ${square['budget'] ?? ''}"),
-square['image'] != null
-? Image.asset(
-square['image'],
-width: 100,
-height: 100,
-)
-: SizedBox(),
-],
-),
-actions: [
-ElevatedButton(
-onPressed: () =>
-_showEditSquareDialog(index),
-child: Text('Editar'),
-),
-ElevatedButton(
-onPressed: () {
-showexcluirtDialog(
-context,
-'Deseja excluir essa viagem permanentimente?',
-index);
-},
-child: Text('Excluir'),
-),
-],
-);
-},
-);
-},
-child: Container(
-margin: EdgeInsets.all(10),
-color: Color.fromARGB(255, 255, 255, 255)
-.withOpacity(0.8),
-child: Column(
-children: [
-Text(square['title'] ?? ''),
-square['image'] != null
-? Image.asset(
-square['image'],
-width: 85,
-height: 85,
-)
-: SizedBox(),
-],
-),
-),
-);
-},
-),
-),
-ElevatedButton(
-onPressed: _showAddSquareDialog,
-style: ElevatedButton.styleFrom(
-backgroundColor: Color.fromARGB(207, 1, 167, 179),
-),
-child: Text(
-'Adicionar Viagem',
-style: TextStyle(
-color: Colors.black,
-),
-),
-),
-],
-),
-),
-],
-),
-],
-),
-),
-);
-}
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Color.fromARGB(207, 1, 167, 179),
+          title: Text('Viagens'),
+          actions: [
+            IconButton(
+              onPressed: () => _logout(),
+              icon: Icon(Icons.exit_to_app),
+            ),
+          ],
+        ),
+        body: Stack(
+          children: [
+            Center(
+              child: Container(
+                width: double.infinity,
+                height: double.infinity,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage('lib/assets/image/inicial.png'),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+            ),
+            Column(
+              children: [
+                Spacer(flex: 1),
+                Expanded(
+                  flex: 1,
+                  child: Column(
+                    children: [
+                      Expanded(
+                        child: GridView.builder(
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 3,
+                            childAspectRatio: 1,
+                          ),
+                          itemCount: squares.length,
+                          itemBuilder: (context, index) {
+                            final square = squares[index];
+                            return GestureDetector(
+                              onTap: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: Text(square['title'] ?? ''),
+                                      content: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Text(
+                                              "Descrição: ${square['description'] ?? ''}"),
+                                          Text(
+                                              "Orçamento: ${square['budget'] ?? ''} Reais"),
+                                          square['image'] != null
+                                              ? Image.asset(
+                                                  square['image'],
+                                                  width: 100,
+                                                  height: 100,
+                                                )
+                                              : SizedBox(),
+                                        ],
+                                      ),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () =>
+                                              _showEditSquareDialog(index),
+                                          child: Text('Editar'),
+                                        ),
+                                        TextButton(
+                                          onPressed: () {
+                                            showexcluirtDialog(
+                                                context,
+                                                'Deseja excluir essa viagem permanentimente?',
+                                                index);
+                                          },
+                                          child: Text('Excluir'),
+                                        ),
+                                        TextButton(
+                                          onPressed: () =>
+                                              _navigateToTodoListScreen(squares[index]['id']),
+                                          child: Text('Ver Lista'),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              },
+                              child: Container(
+                                margin: EdgeInsets.all(10),
+                                color: Color.fromARGB(255, 255, 255, 255)
+                                    .withOpacity(0.8),
+                                child: Column(
+                                  children: [
+                                    Text(square['title'] ?? ''),
+                                    square['image'] != null
+                                        ? Image.asset(
+                                            square['image'],
+                                            width: 85,
+                                            height: 85,
+                                          )
+                                        : SizedBox(),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                      ElevatedButton(
+                        onPressed: _showAddSquareDialog,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Color.fromARGB(207, 1, 167, 179),
+                        ),
+                        child: Text(
+                          'Adicionar Viagem',
+                          style: TextStyle(
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }
